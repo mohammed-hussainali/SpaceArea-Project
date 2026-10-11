@@ -28,3 +28,13 @@ publish/
 # OS files
 .DS_Store
 Thumbs.db
+
+# Production secrets (MonsterASP database password, SMTP password, Google secret)
+appsettings.Production.json
+
+# Publish profiles (contain hosting account details; import your own from the hosting panel)
+*.pubxml
+
+# Files uploaded by users at runtime (CVs, reports, profile images)
+Project/wwwroot/uploads/
+Project/wwwroot/Docx/

@@ -1,0 +1,5 @@
+# Normalize line endings for everyone, whatever their OS or editor settings
+* text=auto
+
+# Better diffs for C# files
+*.cs diff=csharp
