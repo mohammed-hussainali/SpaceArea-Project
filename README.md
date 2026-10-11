@@ -263,15 +263,30 @@ MimeKit
 - Password Recovery
 
 ### Configuration
-## Use this code block in your appsettings.json file & fill it with your data
-```json
-"SMTP": {
-  "Host": "smtp.gmail.com",
-  "Port": "587",
-  "SenderEmail": "",
-  "SenderName": "",
-  "Password": ""
-},
+
+Store these values with .NET User Secrets. Never put real passwords in `appsettings.json`, because this repository is public.
+
+```bash
+cd Project
+dotnet user-secrets set "SMTP:Host" "smtp.gmail.com"
+dotnet user-secrets set "SMTP:Port" "587"
+dotnet user-secrets set "SMTP:SenderEmail" "you@gmail.com"
+dotnet user-secrets set "SMTP:SenderName" "Spaceara"
+dotnet user-secrets set "SMTP:Password" "your-gmail-app-password"
+```
+
+Gmail requires an App Password, not the account password.
+
+---
+
+## Google Sign-In
+
+Google authentication is registered at startup, so both values must be set and non-empty. Otherwise every request fails with `Value cannot be null. (Parameter 'ClientId')`.
+
+```bash
+cd Project
+dotnet user-secrets set "Authentication:Google:ClientId" "your-client-id"
+dotnet user-secrets set "Authentication:Google:ClientSecret" "your-client-secret"
 ```
 
 ---
@@ -296,10 +311,11 @@ EmailVerificationCode
 
 ## Connection String
 
-```json
-"ConnectionStrings": {
-  "DefaultConnection": ""
-}
+`appsettings.json` points to SQL Server LocalDB by default. To use another SQL Server locally, override it with User Secrets instead of editing the file:
+
+```bash
+cd Project
+dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Server=.;Database=Spaceara;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=true"
 ```
 
 ---
@@ -309,7 +325,8 @@ EmailVerificationCode
 ## Clone Repository
 
 ```bash
-git clone https://github.com/MoayadMadhoun/Project/tree/develop
+git clone https://github.com/mohammed-hussainali/SpaceArea-Project.git
+cd SpaceArea-Project
 ```
 
 ## Restore Packages
@@ -321,13 +338,14 @@ dotnet restore
 ## Apply Database Migrations
 
 ```bash
-dotnet ef database update
+dotnet tool install --global dotnet-ef
+dotnet ef database update --project Project
 ```
 
 ## Run Application
 
 ```bash
-dotnet run
+dotnet run --project Project
 ```
 
 Or press:
@@ -337,6 +355,15 @@ F5
 ```
 
 inside Visual Studio 2026.
+
+---
+
+#  Deployment
+
+The production server reads `Project/appsettings.Production.json`. This file is git-ignored so passwords never reach GitHub; create it on the machine you publish from.
+
+- [deploy/MonsterASP.md](deploy/MonsterASP.md): step-by-step MonsterASP deployment guide (Arabic), including common errors and fixes.
+- [deploy/database.sql](deploy/database.sql): idempotent script that creates or updates the whole database schema from SSMS.
 
 ---
 
